@@ -60,7 +60,7 @@ askcode/
 Cloner le projet :
 
 ```bash
-git clone https://github.com/TON-PSEUDO/askcode.git
+git clone https://github.com/Ndiagna/askcode.git
 cd askcode
 ```
 
@@ -117,18 +117,6 @@ Lancer les tests automatisés :
 ```bash
 pytest -v
 ```
-
-## Feuille de route
-
-Les prochaines évolutions prévues :
-
-- [ ] Recherche de classes, méthodes et fonctions.
-- [ ] Identification des relations entre les composants.
-- [ ] Analyse des dépendances et des flux d'exécution.
-- [ ] Indexation du code source.
-- [ ] Intégration d'un LLM.
-- [ ] Mise en place d'un système RAG pour répondre aux questions en langage naturel.
-- [ ] Réponses avec références aux fichiers et aux lignes de code.
 
 ## Vision du projet
 
