@@ -121,10 +121,10 @@ pytest -v
 ## Intégration continue
 
 Sur chaque push ou pull request vers `develop` et `main`, GitHub Actions lance
-en parallèle le formatage et le lint Ruff, les tests avec couverture, la
-vérification de types avec mypy et les scans de sécurité Bandit/pip-audit.
-Le package est construit et publié comme artefact uniquement si ces contrôles
-réussissent.
+un job qualité qui vérifie le formatage et le lint Ruff, lance les tests avec
+couverture, vérifie les types avec mypy et exécute les scans Bandit/pip-audit.
+Les dépendances Python et Composer sont mises en cache. Le package est construit
+dans un job distinct uniquement si tous les contrôles qualité réussissent.
 
 ## Vision du projet
 
