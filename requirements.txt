@@ -1,0 +1,8 @@
+# Python development and CI tools
+bandit
+build
+mypy
+pip-audit
+pytest
+pytest-cov
+ruff

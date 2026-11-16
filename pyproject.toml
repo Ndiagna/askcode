@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "askcode"
+version = "0.1.0"
+description = "An assistant for exploring existing codebases"
+readme = "README.md"
+requires-python = ">=3.13"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.mypy]
+check_untyped_defs = true
+python_version = "3.13"

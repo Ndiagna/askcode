@@ -3,15 +3,19 @@ from askcode.search import search_symbols
 
 def test_search_finds_class():
     report = {
-        "python_analysis": [{
-            "file": "app.py",
-            "classes": [{
-                "name": "ArticleController",
-                "line": 10,
-                "methods": [],
-            }],
-            "functions": [],
-        }],
+        "python_analysis": [
+            {
+                "file": "app.py",
+                "classes": [
+                    {
+                        "name": "ArticleController",
+                        "line": 10,
+                        "methods": [],
+                    }
+                ],
+                "functions": [],
+            }
+        ],
         "php_analysis": [],
     }
 
@@ -24,18 +28,24 @@ def test_search_finds_class():
 
 def test_search_finds_method():
     report = {
-        "python_analysis": [{
-            "file": "app.py",
-            "classes": [{
-                "name": "ArticleController",
-                "line": 10,
-                "methods": [{
-                    "name": "importArticles",
-                    "line": 15,
-                }],
-            }],
-            "functions": [],
-        }],
+        "python_analysis": [
+            {
+                "file": "app.py",
+                "classes": [
+                    {
+                        "name": "ArticleController",
+                        "line": 10,
+                        "methods": [
+                            {
+                                "name": "importArticles",
+                                "line": 15,
+                            }
+                        ],
+                    }
+                ],
+                "functions": [],
+            }
+        ],
         "php_analysis": [],
     }
 
@@ -49,15 +59,19 @@ def test_search_finds_method():
 
 def test_search_is_case_insensitive():
     report = {
-        "python_analysis": [{
-            "file": "app.py",
-            "classes": [{
-                "name": "ArticleController",
-                "line": 10,
-                "methods": [],
-            }],
-            "functions": [],
-        }],
+        "python_analysis": [
+            {
+                "file": "app.py",
+                "classes": [
+                    {
+                        "name": "ArticleController",
+                        "line": 10,
+                        "methods": [],
+                    }
+                ],
+                "functions": [],
+            }
+        ],
         "php_analysis": [],
     }
 

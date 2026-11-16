@@ -1,4 +1,3 @@
-
 from askcode.report import generate_report
 
 
@@ -17,8 +16,7 @@ def test_generate_report_returns_file_statistics(tmp_path):
 
 def test_generate_report_includes_python_analysis(tmp_path):
     (tmp_path / "article.py").write_text(
-        "def normalize_title(title):\n"
-        "    return title.strip()\n",
+        "def normalize_title(title):\n    return title.strip()\n",
         encoding="utf-8",
     )
 

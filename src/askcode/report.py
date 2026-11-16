@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 from askcode.analyzer import analyze_python_file
@@ -27,10 +26,7 @@ def generate_report(repository_path: str) -> dict:
         "repository": str(root),
         "total_files": len(files),
         "files_by_extension": counts,
-        "files": [
-            str(path.relative_to(root))
-            for path in files
-        ],
+        "files": [str(path.relative_to(root)) for path in files],
         "python_analysis": python_analysis,
         "php_analysis": php_analysis,
     }

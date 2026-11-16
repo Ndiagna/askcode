@@ -1,4 +1,3 @@
-
 from askcode.analyzer import analyze_python_file
 
 
@@ -27,9 +26,7 @@ def normalize_title(title):
         {"name": "find_all", "line": 2},
         {"name": "create", "line": 5},
     ]
-    assert result["functions"] == [
-        {"name": "normalize_title", "line": 9}
-    ]
+    assert result["functions"] == [{"name": "normalize_title", "line": 9}]
 
 
 def test_analyze_empty_python_file(tmp_path):

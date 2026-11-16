@@ -1,13 +1,9 @@
-
 from pathlib import Path
 
 
 def summarize_analysis(report: dict) -> dict:
     """Create a compact summary of a repository analysis."""
-    analyses = (
-        report.get("python_analysis", [])
-        + report.get("php_analysis", [])
-    )
+    analyses = report.get("python_analysis", []) + report.get("php_analysis", [])
 
     classes = []
     total_methods = 0
@@ -24,18 +20,18 @@ def summarize_analysis(report: dict) -> dict:
             repository_path = Path(report["repository"])
 
             try:
-                relative_path = str(
-                    file_path.relative_to(repository_path)
-                )
+                relative_path = str(file_path.relative_to(repository_path))
             except ValueError:
                 relative_path = str(file_path)
 
-            classes.append({
-                "name": class_info.get("name") or "(anonymous class)",
-                "file": relative_path,
-                "line": class_info["line"],
-                "methods_count": len(methods),
-            })
+            classes.append(
+                {
+                    "name": class_info.get("name") or "(anonymous class)",
+                    "file": relative_path,
+                    "line": class_info["line"],
+                    "methods_count": len(methods),
+                }
+            )
 
     return {
         "repository": report["repository"],

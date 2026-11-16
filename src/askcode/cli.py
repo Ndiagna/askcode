@@ -6,9 +6,7 @@ from askcode.search import search_symbols
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="AskCode - Understand your codebase"
-    )
+    parser = argparse.ArgumentParser(description="AskCode - Understand your codebase")
 
     parser.add_argument(
         "command",
