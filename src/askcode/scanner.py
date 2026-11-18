@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 SUPPORTED_EXTENSIONS = {".py", ".php"}
 
@@ -18,14 +18,10 @@ def scan_repository(repository_path: str) -> list[Path]:
     root = Path(repository_path).resolve()
 
     if not root.exists():
-        raise FileNotFoundError(
-            f"Repository does not exist: {root}"
-        )
+        raise FileNotFoundError(f"Repository does not exist: {root}")
 
     if not root.is_dir():
-        raise NotADirectoryError(
-            f"Repository path is not a directory: {root}"
-        )
+        raise NotADirectoryError(f"Repository path is not a directory: {root}")
 
     source_files = []
 
@@ -36,10 +32,7 @@ def scan_repository(repository_path: str) -> list[Path]:
         relative_path = path.relative_to(root)
         parts = relative_path.parts
 
-        if any(
-            part in IGNORED_DIRECTORIES
-            for part in parts[:-1]
-        ):
+        if any(part in IGNORED_DIRECTORIES for part in parts[:-1]):
             continue
 
         if parts[:3] == ("storage", "framework", "views"):

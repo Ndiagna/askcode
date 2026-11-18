@@ -1,4 +1,3 @@
-
 import ast
 from pathlib import Path
 
@@ -24,11 +23,13 @@ def analyze_python_file(file_path: Path) -> dict:
                 )
             ]
 
-            classes.append({
-                "name": node.name,
-                "line": node.lineno,
-                "methods": methods,
-            })
+            classes.append(
+                {
+                    "name": node.name,
+                    "line": node.lineno,
+                    "methods": methods,
+                }
+            )
 
     functions = [
         {

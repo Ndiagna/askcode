@@ -84,10 +84,10 @@ composer install
 cd ..
 ```
 
-Installer pytest :
+Installer les dépendances Python de développement et de CI :
 
 ```bash
-pip install pytest
+pip install -r requirements.txt
 ```
 
 ## Utilisation
@@ -118,9 +118,16 @@ Lancer les tests automatisés :
 pytest -v
 ```
 
+## Intégration continue
+
+Sur chaque push ou pull request vers `develop` et `main`, GitHub Actions lance
+un job qualité qui vérifie le formatage et le lint Ruff, lance les tests avec
+couverture, vérifie les types avec mypy et exécute les scans Bandit/pip-audit.
+Les dépendances Python et Composer sont mises en cache. Le package est construit
+dans un job distinct uniquement si tous les contrôles qualité réussissent.
+
 ## Vision du projet
 
 L'objectif final est de transformer AskCode en un assistant capable de comprendre un dépôt de code, d'expliquer son fonctionnement et d'aider les développeurs à naviguer dans des projets qu'ils ne connaissent pas.
 
 **AskCode — Understand your codebase, faster.**
-

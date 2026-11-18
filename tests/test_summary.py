@@ -1,4 +1,3 @@
-
 from askcode.summary import summarize_analysis
 
 
@@ -22,9 +21,7 @@ def test_summarize_analysis_counts_classes_methods_and_functions():
                     {
                         "name": "Article",
                         "line": 3,
-                        "methods": [
-                            {"name": "title", "line": 5}
-                        ],
+                        "methods": [{"name": "title", "line": 5}],
                     }
                 ],
             }
