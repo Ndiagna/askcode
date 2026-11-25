@@ -8,12 +8,19 @@ use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 
-if ($argc !== 2) {
+$arguments = $_SERVER['argv'] ?? [];
+
+if (
+    !is_array($arguments)
+    || count($arguments) !== 2
+    || !isset($arguments[1])
+    || !is_string($arguments[1])
+) {
     fwrite(STDERR, "Usage: php analyze.php <file.php>\n");
     exit(1);
 }
 
-$filePath = $argv[1];
+$filePath = $arguments[1];
 
 if (!is_file($filePath)) {
     fwrite(STDERR, "File not found: {$filePath}\n");

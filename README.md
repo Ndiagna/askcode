@@ -120,11 +120,10 @@ pytest -v
 
 ## Intégration continue
 
-Sur chaque push ou pull request vers `develop` et `main`, GitHub Actions lance
-un job qualité qui vérifie le formatage et le lint Ruff, lance les tests avec
-couverture, vérifie les types avec mypy et exécute les scans Bandit/pip-audit.
-Les dépendances Python et Composer sont mises en cache. Le package est construit
-dans un job distinct uniquement si tous les contrôles qualité réussissent.
+Sur chaque push ou pull request vers `develop` et `master`, GitHub Actions
+exécute les phases Prepare, Validate, Code quality et Test, puis construit le
+package Python si les contrôles passent. La configuration modulaire, les
+conventions et les outils sont décrits dans [la documentation CI](docs/ci.md).
 
 ## Vision du projet
 

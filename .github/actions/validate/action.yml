@@ -1,0 +1,44 @@
+name: Validate changes
+description: Enforce branch and pull request title conventions and report outdated dependencies
+runs:
+  using: composite
+  steps:
+    - name: Validate branch name
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        BRANCH_NAME: ${{ github.head_ref }}
+      run: |
+        if [[ ! "$BRANCH_NAME" =~ ^(feat|fix|docs|chore|ci)/[A-Z]+-[0-9]+-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+          echo "::error::Branch name must match <type>/<TICKET>-<description>, for example feat/IT-02-add-ci."
+          exit 1
+        fi
+
+    - name: Validate pull request title
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }}
+      run: |
+        if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|chore|ci|refactor|test|build|perf)(\([a-zA-Z0-9._/-]+\))?!?:[[:space:]]+.+$ ]]; then
+          echo "::error::Use a Conventional Commit title, for example feat: add CI workflow."
+          exit 1
+        fi
+
+    - name: Check Python dependency consistency
+      shell: bash
+      run: python -m pip check
+
+    - name: Validate Composer manifest and lock
+      shell: bash
+      run: composer validate --working-dir=php-parser --no-check-publish
+
+    - name: Report outdated Python dependencies
+      shell: bash
+      continue-on-error: true
+      run: python -m pip list --outdated
+
+    - name: Report outdated PHP dependencies
+      shell: bash
+      continue-on-error: true
+      run: composer outdated --working-dir=php-parser --direct
