@@ -3,25 +3,29 @@ description: Enforce branch and pull request title conventions and report outdat
 runs:
   using: composite
   steps:
-    - name: Validate branch name
+    - name: Validate branch name and pull request title
       if: github.event_name == 'pull_request'
       shell: bash
       env:
         BRANCH_NAME: ${{ github.head_ref }}
-      run: |
-        if [[ ! "$BRANCH_NAME" =~ ^(feat|fix|docs|chore|ci)/[A-Z]+-[0-9]+-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
-          echo "::error::Branch name must match <type>/<TICKET>-<description>, for example feat/IT-02-add-ci."
-          exit 1
-        fi
-
-    - name: Validate pull request title
-      if: github.event_name == 'pull_request'
-      shell: bash
-      env:
         PR_TITLE: ${{ github.event.pull_request.title }}
       run: |
+        source .github/scripts/workflow-utils.sh
+        validation_failed=0
+
+        if [[ ! "$BRANCH_NAME" =~ ^(feat|fix|docs|chore|ci)/[A-Z]+-[0-9]+-[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+          safe_branch_name="$(escape_workflow_command_data "$BRANCH_NAME")"
+          echo "::error title=Invalid branch name::Received '${safe_branch_name}'. Expected <type>/<TICKET>-<description>, e.g. feat/IT-02-add-ci."
+          validation_failed=1
+        fi
+
         if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|chore|ci|refactor|test|build|perf)(\([a-zA-Z0-9._/-]+\))?!?:[[:space:]]+.+$ ]]; then
-          echo "::error::Use a Conventional Commit title, for example feat: add CI workflow."
+          safe_pr_title="$(escape_workflow_command_data "$PR_TITLE")"
+          echo "::error title=Invalid pull request title::Received '${safe_pr_title}'. Expected Conventional Commit format, e.g. feat: add CI workflow."
+          validation_failed=1
+        fi
+
+        if [[ "$validation_failed" -ne 0 ]]; then
           exit 1
         fi
 
