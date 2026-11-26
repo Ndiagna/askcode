@@ -1,5 +1,10 @@
 {
     "require": {
+        "php": ">=8.0",
         "nikic/php-parser": "^5.9"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^2.0"
     }
 }

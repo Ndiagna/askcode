@@ -1,0 +1,43 @@
+name: Code quality
+description: Run Python and PHP formatting, lint, type and security checks
+runs:
+  using: composite
+  steps:
+    - name: Check Python formatting
+      shell: bash
+      run: ruff format --check src/ tests/ scripts/
+
+    - name: Lint Python code
+      shell: bash
+      run: ruff check src/ tests/ scripts/
+
+    - name: Check Python types
+      shell: bash
+      run: mypy src/askcode/
+
+    - name: Scan Python source with Bandit
+      shell: bash
+      run: bandit -r src/ scripts/ -ll -f json -o bandit-report.json
+
+    - name: Audit Python dependencies
+      shell: bash
+      run: pip-audit -r requirements.txt --format json --output pip-audit-report.json
+
+    - name: Check PHP formatting
+      working-directory: php-parser
+      shell: bash
+      run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.dist.php
+
+    - name: Analyse PHP with PHPStan
+      shell: bash
+      run: php-parser/vendor/bin/phpstan analyse --configuration=php-parser/phpstan.neon --no-progress
+
+    - name: Upload security reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          pip-audit-report.json
+        if-no-files-found: ignore

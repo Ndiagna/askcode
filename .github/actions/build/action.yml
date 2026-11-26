@@ -1,0 +1,27 @@
+name: Build Python package
+description: Build and upload source and wheel distributions
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+        cache: pip
+        cache-dependency-path: |
+          requirements.txt
+          pyproject.toml
+
+    - name: Install build tool
+      shell: bash
+      run: python -m pip install build
+
+    - name: Build package
+      shell: bash
+      run: python -m build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package
+        path: dist/

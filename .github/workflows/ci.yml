@@ -10,103 +10,40 @@ on:
       - develop
       - master
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  quality:
-    name: Quality checks
+  pipeline:
+    name: Prepare, validate, quality and test
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            pyproject.toml
+      - name: Prepare dependencies and runtimes
+        uses: ./.github/actions/prepare
 
-      - name: Install Python dependencies
-        run: python -m pip install -r requirements.txt -e .
+      - name: Validate branch, PR title and dependency updates
+        uses: ./.github/actions/validate
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
+      - name: Run code quality checks
+        uses: ./.github/actions/code-quality
 
-      - name: Cache Composer packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('php-parser/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Install PHP dependencies
-        run: composer install --working-dir=php-parser --no-interaction --prefer-dist
-
-      - name: Check formatting
-        run: ruff format --check src/ tests/ scripts/
-
-      - name: Lint Python code
-        run: ruff check src/ tests/ scripts/
-
-      - name: Run tests with coverage
-        run: pytest --cov=askcode --cov-report=term-missing --cov-report=xml
-
-      - name: Check types
-        run: mypy src/askcode/
-
-      - name: Scan source code with Bandit
-        run: bandit -r src/ scripts/ -ll -f json -o bandit-report.json
-
-      - name: Audit Python dependencies
-        run: pip-audit -r requirements.txt --format json --output pip-audit-report.json
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
-          if-no-files-found: ignore
-
-      - name: Upload security reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: security-reports
-          path: |
-            bandit-report.json
-            pip-audit-report.json
-          if-no-files-found: ignore
+      - name: Run tests and collect coverage
+        uses: ./.github/actions/test
 
   build:
-    name: Build
+    name: Build package
     runs-on: ubuntu-latest
-    needs: quality
+    needs: pipeline
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            pyproject.toml
-
-      - name: Install build dependencies
-        run: python -m pip install build
-
-      - name: Build package
-        run: python -m build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package
-          path: dist/
+      - name: Build and publish package artifacts
+        uses: ./.github/actions/build
